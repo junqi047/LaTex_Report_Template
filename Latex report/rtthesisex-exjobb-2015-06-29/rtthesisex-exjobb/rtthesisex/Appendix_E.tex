@@ -1,0 +1,23 @@
+ \chapter{Matlab code}\label{cha:code} 
+ In this Appendix E, the whole Matlab code for the whole automatic process is demonstrated.
+
+% mcode
+ 
+% listings
+The following script is the main script to generate all plot automatically which is equal to the process of all simulation results.
+\lstinputlisting[numbers=left,breaklines=true,tabsize=1]{Simulation_with_plots.m}
+
+The following script is the script to operate different types of engines and set operating points manually based on this scrip and the PID choice function is enclosed after.
+\lstinputlisting[numbers=left,breaklines=true,tabsize=1]{Initiation_manual.m}
+\lstinputlisting[numbers=left,breaklines=true,tabsize=1]{PID_choice.m}
+
+This script collects all initial data of the engine.
+\lstinputlisting[numbers=left,breaklines=true,tabsize=1]{TCSI_EGR_par.m}
+
+This script presents how the Matlab exports eps files with PID crop.
+\lstinputlisting[numbers=left,breaklines=true,tabsize=1]{exportfig.m}
+
+These two functions are aimed to plot PID simulation result and engine step response performance in the main script.
+\lstinputlisting[numbers=left,breaklines=true,tabsize=1]{plot_out_for_PID.m}
+\lstinputlisting[numbers=left,breaklines=true,tabsize=1]{plot_out_for_engine.m}
+%\mcode{Simulation_with_plots.m}

@@ -1,0 +1,22 @@
+\chapter{Summary and Conclusions}\label{cha:conclusions}
+This thesis presents a mean value engine model by using a TCSI engine 
+as a example and the work consists of two parts in Matlab/Simulink and four types of simulations. The two parts are one TCSI engine with short and long routes EGR separately and one engine control unit with three main controllers which are throttle valve controller with feedforward and feedback parts, wastegate boost controller with only feedback PID controller and EGR valve with residual gas fraction in intake manifold reference controller. They are utilized in different scenarios. 
+
+This thesis presented the basic model with different step response behaviors. It has shown the result and provide more detailed cases study and comparison. 2D and 3D engine maps are determined in a integral simulation in the end including residual gas fraction with local maximum points marked, engine speed from 1000 rpm to 6000 rpm and available engine torque.
+
+The EGR model for both routes show good agreement with reference value, but it needs more validation against measurement data. The comparison between both routes shows similar control values with different local maximum residual gas fraction, but overall short-route EGR has better performance not only in fuel economy but also torque generation. In the efficiency aspect, EGR increases fuel efficiency comparing with the normal engine without EGR. Among them, short route performs better than long route again.
+
+%A single tuning parameter is necessary for different controllers before the simulation which has a desired reference behavior under the condition which has around 5\% error.
+\clearpage
+\subsection*{Future work}
+There are some issues which could be interesting for future work in this thesis work. They are presented in this section.\\
+ \\
+\textbf{Lambda limitation}: Now the engine works only in the condition when lambda is equal to one. High lambda simulation will be interesting to be implemented with development of Oxygen fraction state or other air component vector. Investigating how EGR rate performs in different situations.\\
+\\
+\textbf{More advanced controllers}: A more advanced controller can be developed to have good dynamic feedback instead of static feedback. An advanced tuning method which can be automatic as a interesting topic for investigation.  \\
+\\
+\textbf{Reference values generation}: Oscillations lead to a result of the reference value oscillation when step response performs in different pedal positions. A more clear and effective investigation can be done to identify how sensitive analysis can help for improvement of control system.  \\
+\\
+\textbf{Delay time implement and advanced engine step response}: According to the performance of engine step response in long route EGR, there should be a time delay since it needs more time for the mass flow through the whole pipe for exhaust gas recirculated in reality. More measurement data need to be compared in order to have more accurate contribution. \\
+\\
+\textbf{Driveline implementation}: To implement this thesis into a basic driveline with clutch, Vehicle and drive model can be interesting for next investigation. Moreover, a lot of drive cycle can be compared and the fuel consumption can be determined as well to prove the EGR function. EGR rate condition needs to be considered to give more suitable strategy to control the engine. \\

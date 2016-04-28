@@ -1,0 +1,179 @@
+\chapter{EGR model for simulation purpose}\label{cha:EGRmodel}
+In this chapter, the existing MVEM library is expanded. The model is based on turbocharged engines with EGR system including EGR valve, EGR volume control and EGR cooler. Furthermore, the residual gas fraction state is developed. There are two cases for development of EGR which are long route (EGR-system between compressor and turbine) and short route (EGR-system between the intake and exhaust manifolds). The performance will be presented in this chapter.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{Schematic_illustration_new} 
+\label{fig:schematic_new}
+\caption{Schematic illustration of the modified model with long-route and short-route EGR systems.}
+\end{figure}
+
+\section{Residual gas fraction state}
+According to the structure which was presented in figure 2.1 on page \pageref{fig:schematic_new}, the dynamic element with two states which are temperature and pressure had been modified with adding one more state which is residual gas fraction $\chi_r$.  The variables are determined as follows for intake and exhaust manifold as follows:
+
+\begin{align}
+\dot{m}=f(\dot{m}_i) \\
+\dot{T}=f(\dot{m}_i, T_i) \\
+\dot{\chi}_r=f(\dot{m}_i,\dot{\chi}_{ri})
+\end{align}
+Where $i=$1,2,3...$n$ and $n=$number of connections.
+
+In the receivers with only two connections (e.g. turbine control volume, air filter control volume and intercooler control volume) see figure \ref{fig:two_connections} on page \pageref{fig:two_connections}, $i$ is equal to two, however, in the receivers with three connections (e.g. intake manifold and exhaust manifold) see figure \ref{fig:three_connections} on page \pageref{fig:three_connections}, $i$ is equal to three. Therefore, it is essential to use a multi-port receiver as a control volume. In this thesis, the direction of the mass flow is determined by the sign of the value. Positive value is in and negative value is out. the control volume is marked with dashed lines and the pressure, temperature, mass and new residual gas fraction states are shown in it with the assumption that the volume is constant.
+
+\begin{figure}[tbp]
+  \centering
+  \subfloat[Alldeles för tidigt.][\label{fig:two_connections}Two connections with temperature, mass flow and residual gas states in control volume.]{\includegraphics[width=0.45\textwidth]{control_volume_2_connectionsJPG} }
+  \qquad
+  \subfloat[Med marginal.][\label{fig:three_connections}Three connections with temperature, mass flow and residual gas states in control volume]{\includegraphics[width=0.45\textwidth]{control_volume_3_connectionsJPG} }
+  \\
+  \caption{\label{fig:times}%
+  The control volume is marked with dashed lines and the pressure, temperature, mass and new residual gas fraction states are shown in it with the assumption that the volume is constant.There are two flows across the boundaries which are upstream and downstream in a) and three flows across the boundaries which are midstream,upstream and downstream. The direction is defined by sign of the vector}
+\end{figure}
+
+With respect to the mass and energy conservation method, the residual gas fraction balance gives the following time derivative for the residual gas fraction in the receivers:
+\begin{align}
+\frac{\mathrm d m_r}{\mathrm d t}=\displaystyle\sum_{i=1}^{n} {(\dot{m}_i\chi_{ri})}
+\end{align}
+
+Furthermore, the time derivative can be remarked as follows:
+
+\begin{align}
+\frac{\mathrm d m_{tot}}{\mathrm d t}=\displaystyle\sum_{i=1}^{n} {\dot{m}_i} 
+\end{align}
+
+Where $i=$1,2,3...$n$ and $n=$number of connections.
+With respect to the residual gas fraction definition literally, the relation can be presented as follow:
+\begin{align}
+\chi_r={m_r \over m_{tot}}={m_r \over {m_{air}+m_r}}
+\end{align}
+
+By doing the time derivative to the residual gas fraction vector, the dynamic element of the state can be induced as follows:
+\begin{align}
+\frac{\mathrm d \chi_r}{\mathrm d t}=\frac{\mathrm d}{\mathrm d t} \left( m_r \over m_{tot} \right)={{\frac{\mathrm d m_r}{\mathrm d t} \times m_{tot}-\frac{\mathrm d m_{tot}}{\mathrm d t} \times m_r} \over m_{tot}^2}
+\end{align}
+
+Combining expression above as well as $\dot{m_r}=\chi_r \times 
+\dot{m}_{tot}$:
+\begin{align}
+\frac{\mathrm d \chi_r}{\mathrm d t} ={{\displaystyle\sum_{i=1}^{n} {{(\dot{m_i}\chi_{ri})} \cdot m_{tot}}-\displaystyle\sum_{i=1}^{n} {\dot{m}_i} \cdot m_{tot} \cdot \chi_r}\over m_{tot}^2 }= {{\displaystyle\sum_{i=1}^{n}{(\dot{m}_i \cdot \chi_{ri}-\dot{m}_i \cdot \chi_r)}} \over m_{tot}}
+\end{align}
+Where $n$ is the amount of connections.
+
+\section{Engine with burned gas mass flow}
+Since the residual gas fraction is known, so the recirculated gas mass flow and the air mass flow can be determined as follows:
+\begin{align}
+\left(\!
+    \begin{array}{c}
+     \dot{m}_{air} \\
+      \dot{m}_r
+    \end{array}
+  \!\right) =\left(\!
+    \begin{array}{c}
+     1-\chi_r \\
+      \chi_r
+    \end{array}
+  \!\right)\times \dot{m}_{tot}
+\end{align}
+Based on the same total mass flow, the air mass flow going through the engine block will be reduced due to the amount occupied by the recirculated gas, so that the torque of engine is decreased.  In the engine block, an adiabatic mixer is implemented in order to mix the exhaust mass flow with engine out temperature and recirculated gas mass flow with the intake temperature. In the end, the residual gas fraction becomes one since lambda equal to one is assumed in the model.
+
+\section{Modeling of EGR in Short route and long route}
+EGR-system in this thesis consists of three components which are one EGR-cooler, one control volume and one EGR valve. They are selected from MVEM\_lib and the valve is modeled as a compressible restriction.
+
+The short-route EGR in this work is defined as an EGR-system implemented between intake and exhaust manifolds in the figure 2.3 on page \pageref{fig:short_route_model}. 
+
+\begin{figure}
+\centering
+\includegraphics[width=1\textwidth]{short_route} 
+\label{fig:short_route_model}
+\caption{Modeling of Turbocharged Engines with short-route EGR implemented in MVEM\_lib.} 
+\end{figure}
+
+The long-route EGR in this work is defined as an EGR-system implemented between air filter and turbine control volumes in the figure 2.4 on page \pageref{long_route_model}.
+
+\begin{figure}
+\centering
+\includegraphics[width=1\textwidth]{long_route} 
+\label{long_route_model}
+\caption{Modeling of Turbocharged Engines with long-route EGR implemented in MVEM\_lib.} 
+\end{figure}
+
+The speculation of the short and long route is that they should both have close performance of controlling the TCSI engine, but long-route EGR will have more time-consuming to achieve the desired value due to more control volume between it comparing with short-route EGR. 
+
+\section{Step response with MVEM\_lib}
+In this section investigation of the transient performance of the EGR loop using step response are presented.
+
+\subsection{Method}
+The method of step response is to operate different set points in the simulation. The nine points used in this section for both routes are:
+Engine speed is equal to 2000 rpm, 3000 rpm and 4000 rpm according to intake manifold pressure equal to 50 kpa, 100 kpa and 150 kpa in each. The distribution of the points is shown in figure 2.5 on the page \pageref{fig:operation_points}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{operation_in_point} 
+\label{fig:operation_points}
+\caption{Operating points distribution for step response. It is available for both long route and short route.} 
+\end{figure}
+
+The method of tuning parameters is to close EGR valve in the beginning and then tune the control signal values to meet the desired intake manifold pressure. Then to do step response for another three cases which are EGR valve 10\% open, half open and total open, see table 2.1 on the page \pageref{fig:table_short_tune} and table 2.2 on the page \pageref{fig:table_long_tune}. Those tables show the adapted engine with two different EGR-systems have normal performance of throttle valve, EGR valve and wastgate interaction to the intake manifold pressure. The intake manifold pressure increases with throttle control signal increasing, wastegate control signal decreasing when EGR is close. It is better to close wastegate for achieving a lower intake manifold pressure.
+
+%\begin{table}
+%\centering
+%\includegraphics[width=1\textwidth]{operation_table_short.jpg} 
+%\label{fig:table_short_tune}
+%\caption{Tuning parameters table for short-route EGR step response. The intake manifold pressure increases with throttle control signal increasing, wastegate control signal decreasing when EGR is close. It is better to close wastegate for achieving a lower intake manifold pressure.} 
+%\end{table}
+
+\begin{table}
+\centering
+\vspace{1ex}
+%\begin{adjustbox}{max width=\textwidth
+\begin{tabular}
+{l*{6}{c}r} Ne [rpm] & p\_imREF [kPa] & u\_th & u\_wg & u\_egr &  p\_imACT [kPa] & Correct \\ \hline 2000 & 150 & 38.27 & 0 & 0 & 150 & OK  \\ 2000 & 100 & 9.97 & 0 & 0 & 100 & OK  \\ 2000 & 50 & 3.394 & 50 & 0 & 50 & OK  \\ 3000 & 150 & 13.323 & 0 & 0 & 150 & OK  \\ 3000 & 100 & 9.834 & 0 & 0 & 100 & OK  \\ 3000 & 50 & 5.794 & 50 & 0 & 50 & OK \\ 4000 & 150 & 13.526 & 0 & 0 & 150 & OK  \\ 4000 & 100 & 10.1 & 0 & 0 & 100 & OK \\ 4000 & 50 & 8.112 & 50 & 0 & 50 & OK \\
+\end{tabular}
+%\end{adjustbox}
+\label{fig:table_short_tune}
+\caption{Tuning parameters table for both long and short route EGR step response. The intake manifold pressure increases with throttle control signal increasing, wastegate control signal decreasing when EGR is close.  pressure.Abbreviations in figure: u\_th(throttle valve control signal), u\_egr(EGR valve control signal), u\_wg(wastegate valve control signal), W\_air(air mass flow), p\_imREF(intake manifold pressure reference),p\_imACT(intake manifold pressure actual value), Ne (engine speed in rpm unit)} 
+\end{table}
+
+\subsection{Open loop step response performance}
+For model identification several step responses in TCSI engine with EGR-system were made. The method of this section is to tune the control signals which are aimed to affect throttle and wastegate with closed EGR loop. The desired intake manifold pressures with EGR valve close had been achieved in the first step. Then, three cases were carried on respectively with a step  from the basic response without EGR to EGR valve total open, half open and 10\% open. The step time is half of the total simulation time. Two examples are shown in figure 2.6 to figure 2.9. The rest can be found in Appendix A and B. The step performance which is selected as examples based on the operating point, engine speed is equal to 3000 rpm, intake manifold pressure is equal to 100 kpa. 
+
+\begin{figure}[tbp]
+  \centering
+  \subfloat[Alldeles för tidigt.][\label{fig:step_response_short_egr0_3000_100}u egr=0 for short-route EGR]{\includegraphics[width=0.8\textwidth]{ne3000_pim100_egr0_to_0_short.eps} }
+  \qquad
+  \subfloat[Med marginal.][\label{fig:step_response_short_egr10_3000_100}u egr=10 for short-route EGR]{\includegraphics[width=0.8\textwidth]{ne3000_pim100_egr0_to_10_short.eps} }
+  \caption{\label{fig:step_response_short_3000_100_1}%
+    step response for engine speed equal to 3000 rpm and intake manifold pressure equal to 100 kpa in different egr valve positions for short-route EGR. The EGR valve opens which leads to that the engine torque decreases, residual gas mass flow increases and exhaust manifold pressure decreases.}
+\end{figure}
+
+\begin{figure}[tbp]
+  \centering
+  \subfloat[Alldeles för tidigt.][\label{fig:step_response_short_egr50_3000_100}u egr=50 for short-route EGR]{\includegraphics[width=0.8\textwidth]{ne3000_pim100_egr0_to_50_short.eps} }
+  \qquad
+  \subfloat[Med marginal.][\label{fig:step_response_short_egr100_3000_100}u egr=100 for short-route EGR]{\includegraphics[width=0.8\textwidth]{ne3000_pim100_egr0_to_100_short.eps} }
+  \caption{\label{fig:step_response_short_3000_100_2}%
+    step response for engine speed equal to 3000 rpm and intake manifold pressure equal to 100 kpa in different egr valve positions for short-route EGR. The EGR valve opens which leads to that the engine torque decreases, residual gas mass flow increases and exhaust manifold pressure decreases.}
+\end{figure}
+
+\begin{figure}[tbp]
+  \centering
+  \subfloat[Alldeles för tidigt.][\label{fig:step_response_long_egr0_3000_100}u egr=0 for long-route EGR]{\includegraphics[width=0.8\textwidth]{ne3000_pim100_egr0_to_0_long.eps} }
+  \qquad
+  \subfloat[Med marginal.][\label{fig:step_response_long_egr10_3000_100}u egr=10 for long-route EGR]{\includegraphics[width=0.8\textwidth]{ne3000_pim100_egr0_to_10_long.eps} }
+  \caption{\label{fig:step_response_long_3000_100_1}%
+    step response for engine speed equal to 3000 rpm and intake manifold pressure equal to 100 kpa in different egr valve positions for long-route EGR. The EGR valve opens which leads to that the engine torque decreases, residual gas mass flow increases and exhaust manifold pressure decreases.}
+\end{figure}
+
+\begin{figure}[tbp]
+  \centering
+  \subfloat[Alldeles för tidigt.][\label{fig:step_response_long_egr50_3000_100}u egr=50 for long-route EGR]{\includegraphics[width=0.8\textwidth]{ne3000_pim100_egr0_to_50_long.eps} }
+  \qquad
+  \subfloat[Med marginal.][\label{fig:step_response_long_egr100_3000_100}u egr=100 for long-route EGR]{\includegraphics[width=0.8\textwidth]{ne3000_pim100_egr0_to_100_long.eps} }
+  \caption{\label{fig:step_response_long_3000_100_2}%
+    step response for engine speed equal to 3000 rpm and intake manifold pressure equal to 100 kpa in different egr valve positions for long-route EGR. The EGR valve opens which leads to that the engine torque decreases, residual gas mass flow increases and exhaust manifold pressure decreases.}
+\end{figure}
+
+Throughout this section these simulation results are treated as dynamic. The step response shows that EGR control signal increases with engine torque decreasing, recirculated gas mass flow increasing and exhaust manifold pressure decreasing. The performance of the step response is normal. 
+
+\section{EGR model summary}
+The model was developed in the available MVEM. In this section, regarding the step response performance shows reasonable trend in TCSI engine with different situations of EGR. The basic TCSI engine has normal behavior according to step responses of throttle and wastegate as well. Since the model is not tuned to measurement data, a few adjustments need to be done to achieve different cases in real environment. Since no measurements are available, it is hard to validate the quantitative behavior, but the parameter trend and relation between them during the step response can be discussed and compared. There are more step responses in the next section to evaluate behavior of the controllers. Both transient response and how well they follow the reference values.

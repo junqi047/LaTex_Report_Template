@@ -1,0 +1,58 @@
+\chapter{Introduction}\label{cha:intro}
+In this chapter, the topic of the thesis is introduced. Based on that information, the problem is formulated followed by limitations, available resources and the method for addressing the problem.
+
+\section{Background}
+Modern engines are faced with increasingly stringent requirements for reduced fuel consumption and lower emissions. A technique which can partly be used to reduce emissions of nitrogen oxides is Exhaust Gas Recirculation, EGR. In gasoline engines it also has the advantage that it can save fuel by reducing pumping losses. However, large mixture of EGR in the air to the cylinders affects the combustion stability negatively. Therefore, it is important to have accurate control of the amount of exhaust gas recirculated. EGR is not currently implemented largely on modern gasoline engines, but with more stringent requirements may be necessary. 
+
+According to the considerations of EGR foundation, EGR has its advantage of that helps the reduction of emission due to that EGR increases the temperature of the mixture gas and accelerates the mixing of gasoline and air as well as evaporation. It can also improve combustion efficiency and reduce fuel consumption \citep{olsson2003effect} \citep{yokomura2003egr}. Consequently, the implementation of EGR can give an important advantage.
+
+In Automotive Systems a new engine test cell VEA (Volvo Engine Architecture) engine from Volvo Cars new engine family has recently been installed. The plan to equip this for future research with a valve for recirculation of exhaust gases now are carried on. Therefore, it is now interesting to examine how control of different actuators will affect the amount of EGR in the air to the cylinders.
+
+%\section{Significance}
+%Firstly, the principle of the work of the EGR (Exhaust Gas Recirculation) needs to be presented here clearly that exhaust gas from the engine consists of  carbon dioxide and water which are close to the chemically inert gas. After allowing those gases to return into the cylinder again in order to dilute the gas in the cylinder, oxygen concentration is reduced accordingly so as to ease the intense combustion reaction due to that carbon dioxide cannot burn but can absorb heat so that the peak temperature decrease. It is occurred to reduce the generation of nitrogen oxide as well since the conditions of generation of nitrogen oxide are high temperature, duration and oxygen-rich state.
+
+%Secondly, since the principle of EGR is presented above, the overview of EGR can be analyzed that emission of nitrogen oxide is reduced. Consequently, EGR can save fuel by reducing pumping losses. To large mixture of EGR in the air to the cylinders, however, affect the combustion stability negatively. 
+
+%On the other hand, phenomenon of energy shortages and increased energy dependence exists. Energy saving becomes one important point over the world as well as reduction of greenhouse gas emissions. The question “how to play the role of energy conservation recently ” determines that gasoline transformation is an unavoidable problem. 
+
+%Comparing with the diesel engine, gasoline one has lower compression ratio which leads to low thermal efficiency and control power by using throttle so as to increase pumping loss and reduce the mechanical efficiency, where EGR can perform positively on.
+
+\section{Problem formulation and goal}
+The goal of this thesis is to develop an existing simulation environment for the air flow in a gasoline engine. The existing model is a Mean Value Engine Model but handles only air or exhaust gases, not a mixture. The work will extend this model to include EGR and develop appropriate models for EGR valves. A new state which is residual gas fraction is implemented. The residual gas is defined as recirculated gas in this thesis. The work should also investigate how the step response of actuators affects the EGR amount. This will give insight to the possible transient performance of the EGR control. Two different EGR routes, which are long-route EGR and short-route EGR, should be considered. Long route has the EGR-system between turbine and compressor and short route has the EGR-system between intake and exhaust manifold.
+
+\begin{itemize}
+	\item Expand existing MVEM to include EGR as well as residual gas fraction state through all system.
+	\item Develop a model for the EGR valve by modification in compressible restriction block in MVEM\_lib and also use multi-port receiver (control volume) instead.
+	\item Examine how the step response of actuators affects the EGR amount. 
+	\item Develop appropriate control strategy and ECU to follow set point in the EGR amount. 
+	\item Comparison between long and short route EGR.
+	\item Examine the relation between engine speed, engine torque and maximum EGR fraction.
+\end{itemize}
+
+\begin{figure}
+\includegraphics[width=1\textwidth]{overview} 
+\label{fig:overview}
+\caption{An overview of the control system used in this thesis. The throttle valve, EGR valve and wastegate are controlled by a software boost controller implemented in the ECU. Abbreviations in figure: Th\_pos  (throttle valve position), egr\_pos(EGR valve position), Wg\_pos(wastegate position), u\_th(throttle valve control signal), u\_egr(EGR valve control signal), u\_wg(wastegate valve control signal), W\_air(air mass flow), p\_imREF(intake manifold pressure reference), p\_icACT(intercooler actual value), p\_imACT(intake manifold pressure actual value), W\_r(residual gas mass flow), p\_egrcACT(EGR-cooler actual value ), X\_rREF(residual gas fraction reference), X\_rACT(residual gas fraction actual value)}
+\end{figure}
+ 
+\section{Limitations}
+It is assumed that the EGR fraction or Oxygen level are measured or available by an observer. For example, the task of estimating the Oxygen level in the intake will not be considered. The controllers studies in this thesis are limited according to the structure shown in figure 1.1 on page \pageref{fig:overview}. This work is limited to a simulation study, to gain knowledge before a future installation. Therefore measurements will not be available.
+
+\section{Resources}
+Since the limitation on measurements, it is important to be able to do simulations and analyze different performance before testing in reality. There are several types of engine model libraries with different design complexities. In this thesis work, Mean Value Engine Models (MVEM) which is favorable for design of control and supervision system is mainly used and expanded. MVEM\_lib has been designed to be flexible and reusable for both naturally aspirated and turbocharged engines \citep{eriksson2008modeling}. All signals are mean value during each cycle. The turbocharged spark ignited engine example which is presented in the figure 1.2 on page \pageref{fig:TCSI_overview}. For the details of the library components see \citep{Per:2005}, \citep{eriksson2002modeling}, \citep{eriksson2007modeling} and \citep{eriksson2014modeling}. This engine model is implemented in Matlab/Simulink.
+
+\begin{figure}
+\includegraphics[width=1\textwidth]{TCSI_overview} 
+\label{fig:TCSI_overview}
+\caption{Modeling of Turbocharged Engines with MVEM\_lib example.}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=1\textwidth]{Schematic_illustration_old} 
+\caption{Schematic illustration of the existing model.}
+\end{figure}
+
+\section{Method and outline}
+The method in this thesis is first to expand the existing TCSI engine with residual gas fraction. Then step responses in the control signals will be done to investigate the transient response, in order to tune the controllers in the ECU. When the ECU is done including tuning parameters, step response will be carried on again to determine the performance of the ECU. The strategy utilized is three controllers, the throttle controller with feedforward and feedback, the wastegate controller with feedback and EGR controller with feedforward and feedback. All feedback is implemented as PID-controller with tracking to prevent wind-up. After those above, case studies should be started. The case studies will be range of recirculated gas determination, torque performance based on same fuel consumption and fuel consumption performance with respect to same torque generation.  When the Simulink model and plot analysis are done for both long and short routes, comparison will be continued and then 2D engine maps which shows the relation between torque, engine speed and residual gas fraction will be done in the end, see figure 4.6. 
+
+Chapter 1 describes the background, purpose, limitation, foundation of this thesis. Chapter 2 presents the overview of the EGR model for simulation purpose with step response performance for both short and long route EGR-systems. Chapter 3 demonstrates the behavior of the controllers and discusses the method for operation and parameter tuning. Cases study is done to provide the foundation of EGR. Chapter 4 shows the TCSI engine control result for both long and short routes. 2D and 3D interaction is proved by plotting. During this thesis, many tasks are identified but still need more attention and improvement that is left as future work in chapter 5. Finally, summary and conclusions are presented in chapter 6.
